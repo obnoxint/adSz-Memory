@@ -49,6 +49,9 @@ public final class Main {
 
     static final String TEXTURE_TYPE_PNG = "PNG";
 
+    static final byte[] RGB_OCHER_LIGHT = { 127, 87, -55 };
+    static final byte[] RGB_LAVENDER_DARK = { -95, -85, -39 };
+
     static final int GAME_CARD_SIZE = 96;
     static final int GAME_BORDER = 10;
     static final int GAME_CARD_MARGIN = 10;
