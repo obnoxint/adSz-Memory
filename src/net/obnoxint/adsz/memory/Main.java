@@ -60,17 +60,24 @@ public final class Main {
 
     public static void main(final String[] args) {
         if (instance == null) {
-            instance = new Main();
             try {
-                instance.init();
-            } catch (final LWJGLException e) {
-                JOptionPane.showMessageDialog(null, "Beim Starten der Anwendung ist ein Problem aufgetreten: " + e.getLocalizedMessage() + "\n\nEin Fehlerbericht wird erzeugt.", "Initialisierungsfehler", JOptionPane.ERROR_MESSAGE);
+                instance = new Main();
+                try {
+                    instance.init();
+                } catch (final LWJGLException e) {
+                    JOptionPane.showMessageDialog(null, "Beim Starten der Anwendung ist ein Problem aufgetreten: " + e.getLocalizedMessage()
+                            + "\n\nEin Fehlerbericht wird erzeugt.", "Initialisierungsfehler", JOptionPane.ERROR_MESSAGE);
+                    writeStackTrace(e);
+                    System.exit(EXIT_CODE_ERROR);
+                }
+                instance.run();
+                instance.die();
+                System.exit(EXIT_CODE_OK);
+            } catch (final Exception e) {
+                JOptionPane.showMessageDialog(null, "Bei der Ausführung der Anwendung ist ein Problem aufgetreten: " + e.getLocalizedMessage()
+                        + "\n\nEin Fehlerbericht wird erzeugt.", "Unbehandelte Ausnahme", JOptionPane.ERROR_MESSAGE);
                 writeStackTrace(e);
-                System.exit(EXIT_CODE_ERROR);
             }
-            instance.run();
-            instance.die();
-            System.exit(EXIT_CODE_OK);
         }
     }
 
