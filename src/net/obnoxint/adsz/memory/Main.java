@@ -18,9 +18,13 @@ import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glOrtho;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -30,6 +34,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
 
 public final class Main {
 
@@ -44,6 +50,7 @@ public final class Main {
     static final String DISPLAY_TITLE = "adSz - Memory";
 
     static final String FILE_NAME_RESSOURCEFOLDER = "res";
+    static final String FILE_NAME_CARDSFOLDER = "cards";
     static final String FILE_EXT_PROPERTIES = ".properties";
     static final String FILE_EXT_PNG = ".png";
 
@@ -55,6 +62,7 @@ public final class Main {
     static final int GAME_CARD_SIZE = 96;
     static final int GAME_BORDER = 10;
     static final int GAME_CARD_MARGIN = 10;
+    static final String GAME_HIDDEN_CARD_NAME = "_hidden";
 
     static Main instance = null;
 
@@ -93,6 +101,9 @@ public final class Main {
     }
 
     private File ressourceFolder = null;
+    private File cardsFolder = null;
+
+    Map<String, Texture> cards = new HashMap<>();
 
     UnicodeFont font = null;
 
@@ -125,6 +136,37 @@ public final class Main {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        loadCards();
+
+    }
+
+    private void loadCards() {
+        final File f = getCardsFolder();
+        final String[] l = f.list(new FilenameFilter() {
+
+            @Override
+            public boolean accept(final File dir, final String name) {
+                return name.endsWith(FILE_EXT_PNG);
+            }
+
+        });
+        for (final String s : l) {
+            try (FileInputStream fis = new FileInputStream(new File(f, s))) {
+                final Texture t = TextureLoader.getTexture(TEXTURE_TYPE_PNG, fis);
+                cards.put(s, t);
+            } catch (final IOException e) {
+                JOptionPane.showMessageDialog(null, "Die Kartentextur \"" + s +"\" konnte nicht geladen werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                writeStackTrace(e);
+                System.exit(EXIT_CODE_ERROR);
+            }
+        }
+
+        if (cards.size() < 4) {
+            JOptionPane.showMessageDialog(null, "Es befinden sich nicht genügend Kartentexturen im Verzeichnis \"cards\".\nDie minimale Anzahl beträgt 4 (inkl. der Textur für verdeckte Karten \""
+                    + GAME_HIDDEN_CARD_NAME + "\").", "Nicht genügend Texturen gefunden.", JOptionPane.ERROR_MESSAGE);
+            System.exit(EXIT_CODE_OK);
+        }
+
     }
 
     private void pollMouse() {
@@ -156,6 +198,13 @@ public final class Main {
             Display.update();
             Display.sync(DISPLAY_FPS);
         }
+    }
+
+    File getCardsFolder() {
+        if (cardsFolder == null) {
+            cardsFolder = new File(FILE_NAME_CARDSFOLDER);
+        }
+        return cardsFolder;
     }
 
     File getRessourceFolder() {
