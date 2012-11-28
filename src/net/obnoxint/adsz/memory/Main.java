@@ -136,11 +136,11 @@ public final class Main {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        loadCards();
+        Difficulty.availableCards = loadCards();
 
     }
 
-    private void loadCards() {
+    private int loadCards() {
         final File f = getCardsFolder();
         final String[] l = f.list(new FilenameFilter() {
 
@@ -155,7 +155,7 @@ public final class Main {
                 final Texture t = TextureLoader.getTexture(TEXTURE_TYPE_PNG, fis);
                 cards.put(s, t);
             } catch (final IOException e) {
-                JOptionPane.showMessageDialog(null, "Die Kartentextur \"" + s +"\" konnte nicht geladen werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Die Kartentextur \"" + s + "\" konnte nicht geladen werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
                 writeStackTrace(e);
                 System.exit(EXIT_CODE_ERROR);
             }
@@ -166,6 +166,8 @@ public final class Main {
                     + GAME_HIDDEN_CARD_NAME + "\").", "Nicht genügend Texturen gefunden.", JOptionPane.ERROR_MESSAGE);
             System.exit(EXIT_CODE_OK);
         }
+
+        return l.length - 1;
 
     }
 

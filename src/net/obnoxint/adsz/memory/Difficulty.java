@@ -28,6 +28,8 @@ enum Difficulty {
     private static final int MIN_ID = 0;
     private static final int MAX_ID = 16;
 
+    static int availableCards;
+
     private static final Map<Integer, Difficulty> idMap = new HashMap<>();
 
     static {
@@ -37,11 +39,13 @@ enum Difficulty {
     }
 
     static Difficulty getNext(final Difficulty difficulty) {
-        return idMap.get(difficulty.id == MAX_ID ? MIN_ID : difficulty.id + 1);
+        final Difficulty r = idMap.get(difficulty.id == MAX_ID ? MIN_ID : difficulty.id + 1);
+        return r.pairs() <= availableCards ? r : getNext(r);
     }
 
     static Difficulty getPrevious(final Difficulty difficulty) {
-        return idMap.get(difficulty.id == MIN_ID ? MAX_ID : difficulty.id - 1);
+        final Difficulty r = idMap.get(difficulty.id == MIN_ID ? MAX_ID : difficulty.id - 1);
+        return r.pairs() <= availableCards ? r : getPrevious(r);
     }
 
     private final int id;      // internal id
@@ -59,6 +63,10 @@ enum Difficulty {
 
     int count() {
         return hCount * vCount;
+    }
+
+    int pairs() {
+        return count() / 2;
     }
 
     Point upperLeft() {
