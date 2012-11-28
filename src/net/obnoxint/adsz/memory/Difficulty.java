@@ -2,6 +2,7 @@ package net.obnoxint.adsz.memory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.lwjgl.util.Point;
 
@@ -29,23 +30,34 @@ enum Difficulty {
     private static final int MAX_ID = 16;
 
     static int availableCards;
+    static Set<Difficulty> limitedDifficulties = null;
 
     private static final Map<Integer, Difficulty> idMap = new HashMap<>();
+    private static final Map<Integer, Difficulty> pairMap = new HashMap<>();
 
     static {
         for (final Difficulty v : values()) {
             idMap.put(v.id, v);
+            pairMap.put(v.pairs(), v);
         }
+    }
+
+    private static boolean isAllowed(final Difficulty difficulty) {
+        return (limitedDifficulties != null && limitedDifficulties.contains(difficulty));
+    }
+
+    static Difficulty getByPairs(final int pairs) {
+        return pairMap.get(pairs);
     }
 
     static Difficulty getNext(final Difficulty difficulty) {
         final Difficulty r = idMap.get(difficulty.id == MAX_ID ? MIN_ID : difficulty.id + 1);
-        return r.pairs() <= availableCards ? r : getNext(r);
+        return r.pairs() <= availableCards && isAllowed(r) ? r : getNext(r);
     }
 
     static Difficulty getPrevious(final Difficulty difficulty) {
         final Difficulty r = idMap.get(difficulty.id == MIN_ID ? MAX_ID : difficulty.id - 1);
-        return r.pairs() <= availableCards ? r : getPrevious(r);
+        return r.pairs() <= availableCards && isAllowed(r) ? r : getPrevious(r);
     }
 
     private final int id;      // internal id

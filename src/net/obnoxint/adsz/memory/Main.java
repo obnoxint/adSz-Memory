@@ -24,7 +24,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -51,7 +54,7 @@ public final class Main {
 
     static final String FILE_NAME_RESSOURCEFOLDER = "res";
     static final String FILE_NAME_CARDSFOLDER = "cards";
-    static final String FILE_EXT_PROPERTIES = ".properties";
+    static final String FILE_NAME_PROPERTIES = "game.properties";
     static final String FILE_EXT_PNG = ".png";
 
     static final String TEXTURE_TYPE_PNG = "PNG";
@@ -114,6 +117,8 @@ public final class Main {
     int mouse_dyn_y = 0;
     boolean mouse_but_l = false;
 
+    private Properties properties;
+
     private Main() {}
 
     private void die() {
@@ -137,6 +142,8 @@ public final class Main {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         Difficulty.availableCards = loadCards();
+
+        loadProperties();
 
     }
 
@@ -169,6 +176,44 @@ public final class Main {
 
         return l.length - 1;
 
+    }
+
+    private void loadProperties() {
+        properties = new Properties();
+
+        try (FileInputStream fis = new FileInputStream(new File(FILE_NAME_PROPERTIES))) {
+            properties.load(fis);
+        } catch (final IOException e) {
+            JOptionPane.showMessageDialog(null, "Beim laden der Eigenschaftendatei \"" + FILE_NAME_PROPERTIES + "\" ist ein Fehler aufgetreten.", "Fehler", JOptionPane.ERROR_MESSAGE);
+            writeStackTrace(e);
+            System.exit(EXIT_CODE_ERROR);
+        }
+
+        final String prop = properties.getProperty("pairs").trim();
+        if (prop != null && !prop.isEmpty()) {
+            final Set<Difficulty> set = new HashSet<>();
+            final String[] split = prop.split(",");
+
+            for (final String s : split) {
+                try {
+                    final int i = Integer.parseInt(s);
+                    final Difficulty d = Difficulty.getByPairs(i);
+                    if (d != null) {
+                        set.add(d);
+                    }
+                } catch (final NumberFormatException e) {}
+            }
+
+            Difficulty.limitedDifficulties = set;
+
+            try {
+                Difficulty.getNext(Difficulty._28);
+            } catch (final StackOverflowError e) {
+                JOptionPane.showMessageDialog(null, "Aufgrund der Anzahl der verfügbaren Kartentexturen und der Einschränkung der Paarmöglichkeiten in der Datei \""
+                        + FILE_NAME_PROPERTIES + "\"\nkann keine zulässige Paarauswahl zustande kommen.\n\nBitte überprüfen Sie die Einstellungen.", "Konfigurationsfehler", JOptionPane.ERROR_MESSAGE);
+                System.exit(EXIT_CODE_ERROR);
+            }
+        }
     }
 
     private void pollMouse() {

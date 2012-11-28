@@ -26,7 +26,7 @@ class StatePairSelection extends State {
 
     private boolean switchCooldown = false;
 
-    Difficulty difficulty = Difficulty._3;
+    Difficulty difficulty = Difficulty.getNext(Difficulty._28);
 
     private final Map<String, Texture> textures = new HashMap<>();
 
