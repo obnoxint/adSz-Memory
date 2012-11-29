@@ -63,6 +63,22 @@ abstract class State {
         return r;
     }
 
+    static void drawTexturedBox(final Box box, final Texture texture) {
+        texture.bind();
+        glBegin(GL_QUADS);
+        {
+            glTexCoord2f(0f, 0f);
+            glVertex2i(box.getUpperLeft().getX(), box.getUpperLeft().getY());
+            glTexCoord2f(texture.getWidth(), 0f);
+            glVertex2i(box.getUpperLeft().getX() + box.getWidth(), box.getUpperLeft().getY());
+            glTexCoord2f(texture.getWidth(), texture.getHeight());
+            glVertex2i(box.getUpperLeft().getX() + box.getWidth(), box.getUpperLeft().getY() + box.getHeight());
+            glTexCoord2f(0f, texture.getHeight());
+            glVertex2i(box.getUpperLeft().getX(), box.getUpperLeft().getY() + box.getHeight());
+        }
+        glEnd();
+    }
+
     static State getActiveState() {
         return activeState;
     }
@@ -88,22 +104,6 @@ abstract class State {
 
     final void drawBackground() {
         drawTexturedBox(BACKGROUND, bg);
-    }
-
-    void drawTexturedBox(final Box box, final Texture texture) {
-        texture.bind();
-        glBegin(GL_QUADS);
-        {
-            glTexCoord2f(0f, 0f);
-            glVertex2i(box.getUpperLeft().getX(), box.getUpperLeft().getY());
-            glTexCoord2f(texture.getWidth(), 0f);
-            glVertex2i(box.getUpperLeft().getX() + box.getWidth(), box.getUpperLeft().getY());
-            glTexCoord2f(texture.getWidth(), texture.getHeight());
-            glVertex2i(box.getUpperLeft().getX() + box.getWidth(), box.getUpperLeft().getY() + box.getHeight());
-            glTexCoord2f(0f, texture.getHeight());
-            glVertex2i(box.getUpperLeft().getX(), box.getUpperLeft().getY() + box.getHeight());
-        }
-        glEnd();
     }
 
     abstract void handleInput();
