@@ -43,7 +43,7 @@ enum Difficulty {
     }
 
     private static boolean isAllowed(final Difficulty difficulty) {
-        return (limitedDifficulties != null && limitedDifficulties.contains(difficulty));
+        return (limitedDifficulties == null || (limitedDifficulties != null && limitedDifficulties.contains(difficulty)));
     }
 
     static Difficulty getByPairs(final int pairs) {
