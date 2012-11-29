@@ -160,7 +160,7 @@ public final class Main {
         for (final String s : l) {
             try (FileInputStream fis = new FileInputStream(new File(f, s))) {
                 final Texture t = TextureLoader.getTexture(TEXTURE_TYPE_PNG, fis);
-                cards.put(s, t);
+                cards.put(s.substring(0, s.length() - FILE_EXT_PNG.length()), t);
             } catch (final IOException e) {
                 JOptionPane.showMessageDialog(null, "Die Kartentextur \"" + s + "\" konnte nicht geladen werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
                 writeStackTrace(e);
