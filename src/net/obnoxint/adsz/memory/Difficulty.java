@@ -61,7 +61,6 @@ enum Difficulty {
     }
 
     private final int id;      // internal id
-
     private Point ul = null;   // upper left Point of the first card
 
     final int hCount;          // number of cards per row
@@ -73,15 +72,7 @@ enum Difficulty {
         this.vCount = vCount;
     }
 
-    int count() {
-        return hCount * vCount;
-    }
-
-    int pairs() {
-        return count() / 2;
-    }
-
-    Point upperLeft() {
+    private Point upperLeft() {
         if (ul == null) {
             final int w = Main.DISPLAY_WIDTH;
             final int h = Main.DISPLAY_HEIGHT;
@@ -97,9 +88,17 @@ enum Difficulty {
         return ul;
     }
 
+    int count() {
+        return hCount * vCount;
+    }
+
+    int pairs() {
+        return count() / 2;
+    }
+
     Point upperLeftOf(final int x, final int y) { // the first card is x = 0, y = 0
         final int s = Main.GAME_CARD_SIZE + Main.GAME_CARD_MARGIN;
-        return new Point(ul.getX() + (x * s), ul.getY() + (y * s));
+        return new Point(upperLeft().getX() + (x * s), upperLeft().getY() + (y * s));
     }
 
 }
