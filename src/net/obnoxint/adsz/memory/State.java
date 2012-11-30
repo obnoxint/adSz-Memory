@@ -30,7 +30,12 @@ abstract class State {
     static final int STATE_PAIRSELECTION = 1;
     static final int STATE_PLAY = 2;
 
+    static final String RES_HOVER_PREFIX = "h_";
     static final Map<String, Texture> textures = new HashMap<>();
+
+    private static Texture getTexture(final String id, final boolean hover) {
+        return getTexture((hover) ? RES_HOVER_PREFIX + id : id);
+    }
 
     protected static State getState(final int id) {
         State r = null;
@@ -59,6 +64,10 @@ abstract class State {
             }
         }
         return r;
+    }
+
+    static void drawBox(final Box box, final String id) {
+        drawTexturedBox(box, getTexture(id, isMouseInside(box)));
     }
 
     static void drawTexturedBox(final Box box, final Texture texture) {
@@ -94,6 +103,10 @@ abstract class State {
             }
         }
         return r;
+    }
+
+    static boolean isMouseInside(final Box box) {
+        return box.isInside(Main.instance.mouse_abs_x, Main.instance.mouse_abs_y);
     }
 
     static void setActiveState(final int id) {
