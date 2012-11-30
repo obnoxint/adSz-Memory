@@ -1,22 +1,15 @@
 package net.obnoxint.adsz.memory;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.JOptionPane;
 
 import org.lwjgl.util.Point;
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
 
 class StatePairSelection extends State {
 
-    private static final String RES_BUTTON_NEXT = "next" + Main.FILE_EXT_PNG;
-    private static final String RES_BUTTON_PREVIOUS = "prev" + Main.FILE_EXT_PNG;
-    private static final String RES_BUTTON_PLAY = "play" + Main.FILE_EXT_PNG;
+    private static final String RES_BUTTON_NEXT = "next";
+    private static final String RES_BUTTON_PREVIOUS = "prev";
+    private static final String RES_BUTTON_PLAY = "play";
     private static final String RES_HOVER_PREFIX = "h_";
 
     private static final Box BUTTON_NEXT = new Box(new Point(250, 325), new Point(300, 350));
@@ -27,8 +20,6 @@ class StatePairSelection extends State {
     private boolean switchCooldown = false;
 
     Difficulty difficulty = Difficulty.getNext(Difficulty._28);
-
-    private final Map<String, Texture> textures = new HashMap<>();
 
     StatePairSelection() throws IOException {
         super(State.STATE_PAIRSELECTION);
@@ -64,19 +55,7 @@ class StatePairSelection extends State {
     }
 
     private Texture getTexture(final String id, final boolean hover) {
-        final String n = (hover) ? RES_HOVER_PREFIX + id : id;
-        Texture r = textures.get(n);
-        if (r == null) {
-            try (FileInputStream fis = new FileInputStream(new File(Main.instance.getRessourceFolder(), n))) {
-                r = TextureLoader.getTexture(Main.TEXTURE_TYPE_PNG, fis);
-                textures.put(n, r);
-            } catch (final IOException e) {
-                JOptionPane.showMessageDialog(null, "Textur konnte nicht geladen werden: " + n, "Fehler", JOptionPane.ERROR_MESSAGE);
-                Main.writeStackTrace(e);
-                System.exit(Main.EXIT_CODE_ERROR);
-            }
-        }
-        return r;
+        return State.getTexture((hover) ? RES_HOVER_PREFIX + id : id);
     }
 
     private boolean isHover(final Box box) {

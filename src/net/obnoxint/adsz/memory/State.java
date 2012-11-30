@@ -31,6 +31,8 @@ abstract class State {
     static final int STATE_PLAY = 2;
     static final int STATE_END = 3;
 
+    static final Map<String, Texture> textures = new HashMap<>();
+
     protected static State getState(final int id) {
         State r = null;
         if (states.containsKey(id)) {
@@ -81,6 +83,21 @@ abstract class State {
 
     static State getActiveState() {
         return activeState;
+    }
+
+    static Texture getTexture(final String id) {
+        Texture r = textures.get(id);
+        if (r == null) {
+            try (FileInputStream fis = new FileInputStream(new File(Main.instance.getRessourceFolder(), id + Main.FILE_EXT_PNG))) {
+                r = TextureLoader.getTexture(Main.TEXTURE_TYPE_PNG, fis);
+                textures.put(id, r);
+            } catch (final IOException e) {
+                JOptionPane.showMessageDialog(null, "Textur konnte nicht geladen werden: " + id, "Fehler", JOptionPane.ERROR_MESSAGE);
+                Main.writeStackTrace(e);
+                System.exit(Main.EXIT_CODE_ERROR);
+            }
+        }
+        return r;
     }
 
     static void setActiveState(final int id) {
