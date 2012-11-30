@@ -100,6 +100,10 @@ class StatePairSelection extends State {
                 changeDifficulty(false);
             } else if (isHover(BUTTON_PLAY)) {
                 setActiveState(STATE_PLAY);
+                try { // Try to prevent accidently selecting a card in the next state.
+                    Main.instance.mouse_but_l = false;
+                    Thread.sleep(200);
+                } catch (final InterruptedException e) {}
             }
         }
     }
