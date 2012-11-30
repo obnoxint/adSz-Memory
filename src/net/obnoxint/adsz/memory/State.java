@@ -29,7 +29,6 @@ abstract class State {
     static final int STATE_INTRO = 0;
     static final int STATE_PAIRSELECTION = 1;
     static final int STATE_PLAY = 2;
-    static final int STATE_END = 3;
 
     static final Map<String, Texture> textures = new HashMap<>();
 
@@ -48,9 +47,6 @@ abstract class State {
                 break;
                 case STATE_PLAY:
                     r = new StatePlay();
-                break;
-                case STATE_END:
-                    r = new StateEnd();
                 break;
                 }
                 if (r != null) {

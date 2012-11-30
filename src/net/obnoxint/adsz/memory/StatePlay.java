@@ -10,9 +10,17 @@ class StatePlay extends State {
         super(State.STATE_PLAY);
     }
 
+    private void drawSummary() {
+        // TODO Auto-generated method stub
+    }
+
     @Override
     void draw() {
-        game.draw();
+        if (game.isGameSolved()) {
+            drawSummary();
+        } else {
+            game.draw();
+        }
     }
 
     @Override
@@ -21,10 +29,9 @@ class StatePlay extends State {
         final int my = Main.instance.mouse_abs_y;
         final boolean mbl = Main.instance.mouse_but_l;
         if (mbl) {
-            game.selectAt(mx, my);
-        }
-        if (game.isGameSolved()) {
-            State.setActiveState(STATE_END);
+            if (!game.isGameSolved()) {
+                game.selectAt(mx, my);
+            }
         }
     }
 
