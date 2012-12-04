@@ -189,7 +189,7 @@ public final class Main {
             System.exit(EXIT_CODE_ERROR);
         }
 
-        final String prop = properties.getProperty("pairs").trim();
+        String prop = properties.getProperty("pairs").trim();
         if (prop != null && !prop.isEmpty()) {
             final Set<Difficulty> set = new HashSet<>();
             final String[] split = prop.split(",");
@@ -213,6 +213,14 @@ public final class Main {
                         + FILE_NAME_PROPERTIES + "\"\nkann keine zulässige Paarauswahl zustande kommen.\n\nBitte überprüfen Sie die Einstellungen.", "Konfigurationsfehler", JOptionPane.ERROR_MESSAGE);
                 System.exit(EXIT_CODE_ERROR);
             }
+        }
+        
+        prop = properties.getProperty("hideDelay");
+        if (prop != null && !prop.isEmpty()){
+            try{
+                int delay = Integer.parseInt(prop);
+                MemoryGame.hideDelay = delay;
+            }catch(NumberFormatException e){};
         }
     }
 

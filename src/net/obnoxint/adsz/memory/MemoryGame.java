@@ -9,6 +9,8 @@ import org.newdawn.slick.opengl.Texture;
 
 final class MemoryGame {
 
+    static int hideDelay = 1000;
+
     private final Difficulty d;
     private final MemoryCard[][] field;
 
@@ -96,7 +98,7 @@ final class MemoryGame {
                             try {
                                 locked = true;
                                 mistakes++;
-                                sleep(500);
+                                sleep(hideDelay);
                             } catch (final InterruptedException e) {} finally {
                                 sel1.hidden = true;
                                 sel2.hidden = true;
