@@ -31,7 +31,7 @@ class StatePlay extends State {
         summary = new int[2];
 
         final int d = ((StatePairSelection) getState(STATE_PAIRSELECTION)).difficulty.pairs() * 100;
-        final int t = Math.round((game.finished - game.started) / 1000);
+        final int t = Math.round((game.finished - game.started + (game.mistakes * MemoryGame.hideDelay)) / 1000);
         final int m = game.mistakes * 10;
         int s = d - t - m;
 
