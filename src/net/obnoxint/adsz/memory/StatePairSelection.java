@@ -13,7 +13,7 @@ class StatePairSelection extends State {
     private static final Box BUTTON_NEXT = new Box(new Point(250, 325), new Point(300, 350));
     private static final Box BUTTON_PREVIOUS = new Box(new Point(250, 425), new Point(300, 450));
     private static final Box BUTTON_PLAY = new Box(new Point(400, 375), new Point(600, 425));
-    private static final Point SELECTION_POS = new Point(190, 360);
+    private static final Point SELECTION_POS = new Point(210, 365);
 
     private boolean switchCooldown = false;
 

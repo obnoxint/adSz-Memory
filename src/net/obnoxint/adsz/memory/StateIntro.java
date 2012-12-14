@@ -21,8 +21,8 @@ class StateIntro extends State {
 
     @SuppressWarnings("unchecked")
     private void initializeFont() {
-        final UnicodeFont f = new UnicodeFont(new Font("MV Boli", Font.BOLD, 36));
-        f.getEffects().add(new ColorEffect(new java.awt.Color(Main.RGB_OCHER_LIGHT[0] + 128, Main.RGB_OCHER_LIGHT[1] + 128, Main.RGB_OCHER_LIGHT[2] + 128)));
+        final UnicodeFont f = new UnicodeFont(new Font("Arial", Font.BOLD, 36));
+        f.getEffects().add(new ColorEffect(new java.awt.Color(Main.RGB_CRIMSON_RED[0] + 128, Main.RGB_CRIMSON_RED[1] + 128, Main.RGB_CRIMSON_RED[2] + 128)));
         f.addAsciiGlyphs();
         try {
             f.loadGlyphs();

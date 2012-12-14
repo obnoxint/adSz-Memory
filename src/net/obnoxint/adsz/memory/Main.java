@@ -50,7 +50,7 @@ public final class Main {
     static final int DISPLAY_WIDTH = 1024;
     static final int DISPLAY_HEIGHT = 768;
     static final int DISPLAY_FPS = 60;
-    static final String DISPLAY_TITLE = "adSz - Memory";
+    static final String DISPLAY_TITLE = "Wuhli - Memory";
 
     static final String FILE_NAME_RESSOURCEFOLDER = "res";
     static final String FILE_NAME_CARDSFOLDER = "cards";
@@ -59,7 +59,7 @@ public final class Main {
 
     static final String TEXTURE_TYPE_PNG = "PNG";
 
-    static final byte[] RGB_OCHER_LIGHT = { 127, 87, -55 };
+    static final byte[] RGB_CRIMSON_RED = { 76, -77, -127 };
     static final byte[] RGB_LAVENDER_DARK = { -95, -85, -39 };
 
     static final int GAME_CARD_SIZE = 96;
